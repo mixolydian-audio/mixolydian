@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/core.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc && vite build"
   },
