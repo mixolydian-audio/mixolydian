@@ -24,7 +24,7 @@ type PatchConnection = {
   addEndpointListener: (
     endpointId: string,
     listener: EventListener,
-    granularity: never,
+    granularity: number,
     sendFullAudioData: boolean
   ) => void;
   /**
@@ -33,16 +33,22 @@ type PatchConnection = {
    * @param listener
    * @returns
    */
-  addParameterListener: (
+  addParameterListener: <T>(
     endpointID: string,
-    listener: (value: number) => void
+    listener: (value: T) => void
   ) => void;
   /**
    * Attaches a listener function that will be called whenever the patch’s status changes. The function will be called with a parameter object containing many properties describing the status, including whether the patch is loaded, any errors, endpoint descriptions, its manifest, etc.
    * @param listener
    * @returns
    */
-  addStatusListener: (listener: EventListener) => void;
+  addStatusListener: (
+    listener: (status: {
+      details: {
+        inputs: Array<any>;
+      };
+    }) => void
+  ) => void;
   /**
    * Attaches a listener function that will be called when any key-value pair in the stored state is changed. The listener function will receive a message parameter with properties key and value.
    * @param listener
@@ -70,16 +76,13 @@ type PatchConnection = {
    * @param listener
    * @returns
    */
-  removeParameterListener: (
-    endpointID: string,
-    listener: EventListener
-  ) => void;
+  removeParameterListener: <T>(endpointID: string, listener: T) => void;
   /**
    * Removes a listener that was previously added with addStatusListener()
    * @param listener
    * @returns
    */
-  removeStatusListener: (listener: EventListener) => void;
+  removeStatusListener: <T>(listener: (value: T) => void) => void;
   /**
    * Removes a listener that was previously added with addStoredStateValueListener().
    * @param listener

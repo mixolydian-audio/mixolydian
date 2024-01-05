@@ -8,7 +8,16 @@
 processor example  [[ main ]]
 {
     output stream float out;
-    input value float frequency [[ name: "Frequency", min: 5.0f, max: 1000.0f, init: 440.0f ]];
+    input {
+        value float frequency [[ name: "Frequency", min: 5.0f, max: 1000.0f, init: 440.0f ]];
+        value Complex complexSingle [[ name: "Complex Single" ]];
+        event Complex[8] complexArray [[ name: "Complex Array" ]];
+    }
+
+    struct Complex {
+        float foo;
+        bool bar;
+    }
 
     // This is our processor's entry-point function, which is invoked
     // by the system

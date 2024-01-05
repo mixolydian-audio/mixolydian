@@ -1,10 +1,9 @@
-import * as mixo from "@mixolydian/core";
-import { useEffect } from "react";
+import { useEndpoint } from "@mixolydian/react";
 
 export const App = () => {
-  useEffect(() => {
-    console.log(mixo.patch);
-  }, []);
+  const frequency = useEndpoint("frequency");
 
-  return <span>Hi there</span>;
+  return (
+    <span style={{ backgroundColor: "white" }}>Frequency: {frequency}</span>
+  );
 };

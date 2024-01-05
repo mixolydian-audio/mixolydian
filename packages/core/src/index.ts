@@ -1,7 +1,16 @@
 import { EmbeddedPatchConnection } from "./cmajor/types";
 import { create } from "./patch";
+import { Endpoint, EndpointIdentifier } from "./types";
 export { patch } from "./patch";
+export { z } from "zod";
 
-export const init = (connection: EmbeddedPatchConnection) => {
-  create(connection);
+type InitOptions = {
+  endpoints: Record<EndpointIdentifier, Endpoint>;
+};
+
+export const init = (
+  connection: EmbeddedPatchConnection,
+  { endpoints }: InitOptions
+) => {
+  create(connection, endpoints);
 };
