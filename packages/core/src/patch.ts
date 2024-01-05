@@ -1,7 +1,7 @@
 import { EmbeddedPatchConnection } from "./cmajor/types";
 import { Endpoint, EndpointIdentifier } from "./types";
 
-class Patch {
+export class Patch {
   private connection: EmbeddedPatchConnection;
   private inputs: Record<EndpointIdentifier, Endpoint>;
 

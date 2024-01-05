@@ -1,7 +1,7 @@
 import { EmbeddedPatchConnection } from "./cmajor/types";
 import { create } from "./patch";
 import { Endpoint, EndpointIdentifier } from "./types";
-export { patch } from "./patch";
+export { patch, Patch } from "./patch";
 export { z } from "zod";
 
 type InitOptions = {

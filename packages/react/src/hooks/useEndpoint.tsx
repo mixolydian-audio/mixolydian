@@ -1,8 +1,9 @@
-import { patch } from "@mixolydian/core";
 import { useState, useEffect } from "react";
+import { usePatch } from "./usePatch";
 
 export const useEndpoint = (endpoint: string) => {
   const [value, setValue] = useState(0);
+  const patch = usePatch();
 
   useEffect(() => {
     patch.on(endpoint, setValue);
