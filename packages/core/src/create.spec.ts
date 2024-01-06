@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { createPatch } from "./create";
 import { mockPatchConnection } from "./cmajor/mocks/connection";
 
@@ -13,14 +13,8 @@ type PatchInputs = {
 };
 
 describe("Patch", () => {
-  it("should return a patch", () => {
-    const patch = createPatch<PatchInputs>();
-    expect(patch.parameters).toBeDefined();
-  });
-
-  it("should trigger a listener when a parameter changes", async () => {
-    const patch = createPatch<PatchInputs>();
-
+  beforeEach(() => {
+    vi.resetAllMocks;
     const listeners: Array<
       (parameter: { endpointID: string; value: unknown }) => void
     > = [];
@@ -49,10 +43,6 @@ describe("Patch", () => {
       )
     );
 
-    patch.connect(mockPatchConnection);
-
-    expect(patch.parameters.get("frequency")).toStrictEqual(0);
-
     vi.mocked(mockPatchConnection.sendEventOrValue).mockImplementation(
       (endpoint, value) => {
         setTimeout(() => {
@@ -62,6 +52,19 @@ describe("Patch", () => {
         }, 10);
       }
     );
+  });
+
+  it("should return a patch", () => {
+    const patch = createPatch<PatchInputs>();
+    expect(patch.parameters).toBeDefined();
+  });
+
+  it("should trigger a listener when a parameter changes", async () => {
+    const patch = createPatch<PatchInputs>();
+
+    patch.connect(mockPatchConnection);
+
+    expect(patch.parameters.get("frequency")).toStrictEqual(0);
 
     const updateHandler = vi.fn().mockImplementation((value) => {});
 
@@ -69,5 +72,11 @@ describe("Patch", () => {
 
     patch.parameters.set("frequency", 1);
     await vi.waitFor(() => expect(updateHandler).toBeCalledWith(1));
+  });
+
+  it("should return the correct type for a parameter", () => {
+    const patch = createPatch<PatchInputs>();
+    patch.connect(mockPatchConnection);
+    const frequency = patch.parameters.get("frequency");
   });
 });

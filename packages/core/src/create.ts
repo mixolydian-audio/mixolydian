@@ -1,24 +1,26 @@
 import { EmbeddedPatchConnection } from "./cmajor/types";
 import { createProxyStore } from "./store";
 
-export const createPatch = <T = { [key: string]: any }>() => {
-  const store = createProxyStore();
+export const createPatch = <T extends { [key: string]: unknown }>() => {
+  type Endpoint = keyof T & string;
+
+  const store = createProxyStore<T>();
 
   let $connection: EmbeddedPatchConnection | null = null;
 
   return {
     parameters: {
-      get: (endpoint: keyof T): any => {
-        if (!store.has(String(endpoint))) {
+      get: (endpoint: Endpoint): any => {
+        if (!store.has(endpoint)) {
           throw new Error(
             `Parameter ${String(
               endpoint
             )} not found. Make sure you've called createPatch.connect() before calling createPatch.parameters.get().`
           );
         }
-        return store.get(String(endpoint));
+        return store.get(endpoint);
       },
-      set: (endpoint: keyof T, value: any) => {
+      set: <K extends Endpoint>(endpoint: Endpoint, value: T[K]) => {
         if (!$connection) {
           throw new Error(
             `Parameter ${String(
@@ -26,20 +28,25 @@ export const createPatch = <T = { [key: string]: any }>() => {
             )} not found. Make sure you've called createPatch.connect() before calling createPatch.parameters.set().`
           );
         }
-        // TODO get rid of string cast
-        $connection.sendEventOrValue(String(endpoint), value);
+        $connection.sendEventOrValue(endpoint, value);
       },
-      subscribe: (endpoint: keyof T, handler: (value: any) => void): void => {
-        store.subscribe(String(endpoint), handler);
+      subscribe: <K extends Endpoint>(
+        endpoint: K,
+        handler: (value: T[K]) => void
+      ): void => {
+        store.subscribe(endpoint, handler);
       },
-      unsubscribe: (endpoint: keyof T, handler: (value: any) => void): void => {
-        store.unsubscribe(String(endpoint), handler);
+      unsubscribe: <K extends Endpoint>(
+        endpoint: K,
+        handler: (value: T[K]) => void
+      ): void => {
+        store.unsubscribe(endpoint, handler);
       },
     },
     connect: (connection: EmbeddedPatchConnection) => {
       $connection = connection;
       $connection.addAllParameterListener(({ endpointID, value }) => {
-        store.set(endpointID, value);
+        store.set(endpointID, value as any); // TODO get rid of any
       });
 
       $connection.addStatusListener((status) => {

@@ -1,10 +1,11 @@
-export const createProxyStore = () => {
+export const createProxyStore = <T extends { [key: string]: unknown }>() => {
+  type Endpoint = keyof T & string;
   const store = new Map<string, any>();
   const listeners = new Map<string, Array<(value: any) => void>>();
 
   return {
-    has: (endpoint: string): boolean => store.has(endpoint),
-    get: (endpoint: string): any => {
+    has: (endpoint: Endpoint): boolean => store.has(endpoint),
+    get: <K extends Endpoint>(endpoint: K): T[K] => {
       if (!store.has(endpoint)) {
         throw new Error(
           `Parameter ${String(
@@ -14,11 +15,14 @@ export const createProxyStore = () => {
       }
       return store.get(endpoint);
     },
-    set: (endpoint: string, value: any) => {
+    set: <K extends Endpoint>(endpoint: K, value: T[K]) => {
       store.set(endpoint, value);
       listeners.get(endpoint)?.forEach((l) => l(value));
     },
-    subscribe: (endpoint: string, handler: (value: any) => void): void => {
+    subscribe: <K extends Endpoint>(
+      endpoint: K,
+      handler: (value: T[K]) => void
+    ): void => {
       if (!listeners.has(endpoint)) {
         listeners.set(endpoint, [handler]);
       } else {
@@ -29,7 +33,10 @@ export const createProxyStore = () => {
         handler(store.get(endpoint));
       }
     },
-    unsubscribe: (endpoint: string, handler: (value: any) => void): void => {
+    unsubscribe: <K extends Endpoint>(
+      endpoint: K,
+      handler: (value: T[K]) => void
+    ): void => {
       if (listeners.has(endpoint)) {
         listeners.set(
           endpoint,

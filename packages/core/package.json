@@ -7,8 +7,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc && vite build",
-    "test": "vitest run",
-    "test:dev": "vitest watch"
+    "test": "vitest run --typecheck",
+    "test:dev": "vitest watch --typecheck"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
