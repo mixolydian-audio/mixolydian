@@ -1,9 +1,11 @@
-import { useEndpoint } from "@mixolydian/react";
+import { patch } from "./patch";
 
 export const App = () => {
-  const frequency = useEndpoint("frequency");
+  const frequency = patch.useParameter("frequency");
 
   return (
-    <span style={{ backgroundColor: "white" }}>Frequency: {frequency}</span>
+    <span style={{ backgroundColor: "white" }}>
+      Frequency: {`${frequency}`}
+    </span>
   );
 };
