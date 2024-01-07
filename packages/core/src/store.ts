@@ -1,39 +1,46 @@
 export const createProxyStore = <T extends { [key: string]: unknown }>() => {
   type Endpoint = keyof T & string;
-  const store = new Map<string, any>();
-  const listeners = new Map<string, Array<(value: any) => void>>();
+
+  const store: Partial<T> = {};
+
+  type Listener<K extends Endpoint> = (value: T[K]) => void;
+  type Listeners = {
+    [key in Endpoint]?: Listener<key>[];
+  };
+
+  const listeners: Listeners = {};
 
   return {
-    has: (endpoint: Endpoint): boolean => store.has(endpoint),
+    has: (endpoint: Endpoint): boolean => !!store[endpoint],
     get: <K extends Endpoint>(endpoint: K): T[K] => {
-      if (!store.has(endpoint)) {
+      const endpointValue = store[endpoint];
+      if (!endpointValue) {
         throw new Error(
           `Parameter ${String(
             endpoint
           )} not found. Make sure you've called createPatch.connect() before calling createPatch.parameters.get().`
         );
       }
-      return store.get(endpoint);
+      return endpointValue;
     },
     set: <K extends Endpoint>(endpoint: K, value: T[K]) => {
-      store.set(endpoint, value);
-      listeners.get(endpoint)?.forEach((l) => l(value));
+      store[endpoint] = value;
+      listeners[endpoint]?.forEach((handler) => handler(value));
     },
     subscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
-      if (!listeners.has(endpoint)) {
-        listeners.set(endpoint, [handler]);
-      } else {
-        listeners.get(endpoint)?.push(handler);
-      }
+      const endpointListeners = listeners[endpoint];
+      endpointListeners ? endpointListeners.push(handler) : (listeners[endpoint] = [handler]);
 
-      if (store.has(endpoint)) {
-        handler(store.get(endpoint));
+      const endpointValue = store[endpoint];
+      if (endpointValue) {
+        handler(endpointValue);
       }
     },
     unsubscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
-      if (listeners.has(endpoint)) {
-        listeners.set(endpoint, listeners.get(endpoint)?.filter((h) => h !== handler) || []);
-      }
+      const endpointListeners = listeners[endpoint];
+      if (!endpointListeners) return;
+
+      listeners[endpoint] = endpointListeners.filter((h) => h !== handler);
     },
   };
 };
