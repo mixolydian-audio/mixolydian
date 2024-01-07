@@ -19,10 +19,7 @@ export const createProxyStore = <T extends { [key: string]: unknown }>() => {
       store.set(endpoint, value);
       listeners.get(endpoint)?.forEach((l) => l(value));
     },
-    subscribe: <K extends Endpoint>(
-      endpoint: K,
-      handler: (value: T[K]) => void
-    ): void => {
+    subscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
       if (!listeners.has(endpoint)) {
         listeners.set(endpoint, [handler]);
       } else {
@@ -33,15 +30,9 @@ export const createProxyStore = <T extends { [key: string]: unknown }>() => {
         handler(store.get(endpoint));
       }
     },
-    unsubscribe: <K extends Endpoint>(
-      endpoint: K,
-      handler: (value: T[K]) => void
-    ): void => {
+    unsubscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
       if (listeners.has(endpoint)) {
-        listeners.set(
-          endpoint,
-          listeners.get(endpoint)?.filter((h) => h !== handler) || []
-        );
+        listeners.set(endpoint, listeners.get(endpoint)?.filter((h) => h !== handler) || []);
       }
     },
   };

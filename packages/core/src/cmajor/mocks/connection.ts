@@ -1,4 +1,4 @@
-import { EmbeddedPatchConnection } from "../types";
+import { EmbeddedPatchConnection } from '../types';
 
 export const mockPatchConnection: EmbeddedPatchConnection = {
   addEventListener: () => null,
@@ -9,36 +9,31 @@ export const mockPatchConnection: EmbeddedPatchConnection = {
   listenersPerType: {},
   manifest: {
     CmajorVersion: 0,
-    ID: "",
-    category: "",
-    description: "",
+    ID: '',
+    category: '',
+    description: '',
     isInstrument: false,
-    manufacturer: "",
-    name: "",
-    source: "",
-    version: "",
+    manufacturer: '',
+    name: '',
+    source: '',
+    version: '',
     view: {
       height: 0,
       resizeable: false,
-      src: "",
+      src: '',
       width: 0,
     },
   },
-  getResourceAddress: (path: string) => "",
+  getResourceAddress: (path: string) => '',
   sendMessageToServer: (message: string) => {},
-  addAllParameterListener: (
-    listener: (parameter: { endpointID: string; value: unknown }) => void
-  ) => {},
+  addAllParameterListener: (listener: (parameter: { endpointID: string; value: unknown }) => void) => {},
   addEndpointListener: (
     endpointId: string,
     listener: EventListener,
     granularity: number,
     sendFullAudioData: boolean
   ) => {},
-  addParameterListener: <T>(
-    endpointID: string,
-    listener: (value: T) => void
-  ) => {},
+  addParameterListener: <T>(endpointID: string, listener: (value: T) => void) => {},
   addStatusListener: (
     listener: (status: {
       details: {
@@ -58,11 +53,7 @@ export const mockPatchConnection: EmbeddedPatchConnection = {
   requestStatusUpdate: () => {},
   requestStoredStateValue: (key: string) => {},
   resetToInitialState: () => {},
-  sendEventOrValue: <T>(
-    endpointID: string,
-    value: T,
-    rampFrames?: number
-  ) => {},
+  sendEventOrValue: <T>(endpointID: string, value: T, rampFrames?: number) => {},
   sendFullStoredState: (fullState: never) => {},
   sendMIDIInputEvent: (endpointID: string, shortMIDICode: string) => {},
   sendParameterGestureEnd: (endpointID: string) => {},

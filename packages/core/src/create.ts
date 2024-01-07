@@ -1,5 +1,5 @@
-import { EmbeddedPatchConnection } from "./cmajor/types";
-import { createProxyStore } from "./store";
+import { EmbeddedPatchConnection } from './cmajor/types';
+import { createProxyStore } from './store';
 
 export const createPatch = <T extends { [key: string]: unknown }>() => {
   type Endpoint = keyof T & string;
@@ -10,7 +10,7 @@ export const createPatch = <T extends { [key: string]: unknown }>() => {
 
   return {
     parameters: {
-      get: (endpoint: Endpoint): any => {
+      get: <K extends Endpoint>(endpoint: K): T[K] => {
         if (!store.has(endpoint)) {
           throw new Error(
             `Parameter ${String(
@@ -30,16 +30,10 @@ export const createPatch = <T extends { [key: string]: unknown }>() => {
         }
         $connection.sendEventOrValue(endpoint, value);
       },
-      subscribe: <K extends Endpoint>(
-        endpoint: K,
-        handler: (value: T[K]) => void
-      ): void => {
+      subscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
         store.subscribe(endpoint, handler);
       },
-      unsubscribe: <K extends Endpoint>(
-        endpoint: K,
-        handler: (value: T[K]) => void
-      ): void => {
+      unsubscribe: <K extends Endpoint>(endpoint: K, handler: (value: T[K]) => void): void => {
         store.unsubscribe(endpoint, handler);
       },
     },
