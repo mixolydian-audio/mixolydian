@@ -24,8 +24,8 @@ type PatchConnection = {
   addEndpointListener: (
     endpointId: string,
     listener: EventListener,
-    granularity: number,
-    sendFullAudioData: boolean
+    granularity?: number,
+    sendFullAudioData?: boolean
   ) => void;
   /**
    * Attaches a listener function which will be called whenever the value of a specific parameter changes. The listener function will be called with an argument which is the new value.

@@ -1,9 +1,9 @@
 import { vi, assertType, describe, expect, expectTypeOf, it } from 'vitest';
-import { createProxyStore } from './store';
+import { createStore } from './store';
 
 describe('store types', () => {
   it('should require store keys as endpoint parameters', () => {
-    const store = createProxyStore<{
+    const store = createStore<{
       foo: number;
       bar: string;
       foobar: {
@@ -22,14 +22,14 @@ describe('store types', () => {
   });
 
   it('should return the type on get', () => {
-    const store = createProxyStore<{ foo: string }>();
+    const store = createStore<{ foo: string }>();
     store.set('foo', 'bar');
     const foo = store.get('foo');
     assertType<string>(foo);
   });
 
   it('should return the type on subscription', () => {
-    const store = createProxyStore<{ foo: string }>();
+    const store = createStore<{ foo: string }>();
     const listener = vi.fn();
     store.subscribe('foo', listener);
     store.set('foo', 'bar');

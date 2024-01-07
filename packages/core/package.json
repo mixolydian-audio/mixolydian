@@ -6,6 +6,7 @@
   "main": "./dist/core.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "dev": "tsc && vite build --watch",
     "build": "tsc && vite build",
     "test": "vitest run --typecheck",
     "test:dev": "vitest watch --typecheck"

@@ -30,8 +30,8 @@ export const mockPatchConnection: EmbeddedPatchConnection = {
   addEndpointListener: (
     endpointId: string,
     listener: EventListener,
-    granularity: number,
-    sendFullAudioData: boolean
+    granularity?: number,
+    sendFullAudioData?: boolean
   ) => {},
   addParameterListener: <T>(endpointID: string, listener: (value: T) => void) => {},
   addStatusListener: (

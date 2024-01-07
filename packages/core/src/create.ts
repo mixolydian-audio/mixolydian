@@ -1,10 +1,10 @@
 import { EmbeddedPatchConnection } from './cmajor/types';
-import { createProxyStore } from './store';
+import { createStore } from './store';
 
 export const createPatch = <T extends { [key: string]: unknown }>() => {
   type Endpoint = keyof T & string;
 
-  const store = createProxyStore<T>();
+  const store = createStore<T>();
 
   let $connection: EmbeddedPatchConnection | null = null;
 
@@ -43,7 +43,10 @@ export const createPatch = <T extends { [key: string]: unknown }>() => {
         store.set(endpointID, value as any); // TODO get rid of any
       });
 
+      $connection.addEndpointListener('complexSingle', console.info);
+
       $connection.addStatusListener((status) => {
+        console.log('status', status);
         status.details.inputs.forEach((input) => {
           $connection?.requestParameterValue(input.endpointID);
         });

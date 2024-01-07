@@ -1,4 +1,4 @@
-export const createProxyStore = <T extends { [key: string]: unknown }>() => {
+export const createStore = <T extends { [key: string]: unknown }>() => {
   type Endpoint = keyof T & string;
 
   const store: Partial<T> = {};

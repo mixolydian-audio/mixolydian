@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
 import { patch } from './patch';
 
 export const App = () => {
   const frequency = patch.useParameter('frequency');
   const complex = patch.useParameter('complexSingle');
+
+  useEffect(() => {
+    console.log('updating complex');
+    complex.set({ foo: 123, bar: false });
+  }, []);
 
   return (
     <p style={{ backgroundColor: 'white' }}>
