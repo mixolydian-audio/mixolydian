@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { createPatch as _createPatch } from "@mixolydian/core";
+import { useEffect, useState } from 'react';
+import { createPatch as _createPatch } from '@mixolydian/core';
 
 type Parameter<T> = {
   value: T | null;
@@ -11,9 +11,7 @@ export const createPatch = <T extends { [key: string]: unknown }>() => {
 
   return {
     connect: (connection: any) => patch.connect(connection),
-    useParameter: <K extends keyof T & string>(
-      endpoint: K
-    ): Parameter<T[K]> => {
+    useParameter: <K extends keyof T & string>(endpoint: K): Parameter<T[K]> => {
       const [value, setValue] = useState<T[K] | null>(null);
 
       useEffect(() => {
