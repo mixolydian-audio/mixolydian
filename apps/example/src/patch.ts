@@ -1,4 +1,4 @@
-import { createPatch } from "@mixolydian/react";
+import { createPatch } from '@mixolydian/react';
 type Patch = {
   frequency: number;
   complexSingle: {
