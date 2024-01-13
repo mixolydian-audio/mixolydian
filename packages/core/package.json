@@ -9,7 +9,9 @@
     "dev": "tsc && vite build --watch",
     "build": "tsc && vite build",
     "test": "vitest run --typecheck",
-    "test:dev": "vitest watch --typecheck"
+    "test:dev": "vitest watch --typecheck",
+    "lint": "eslint ./src",
+    "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/eslint-config": "0.0.0",
