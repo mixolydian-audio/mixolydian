@@ -13,15 +13,14 @@ Typescript first utility library around [Cmajors](https://cmajor.dev/) custom UI
 Create a patch.ts file with:
 
 ```ts
-import { createPatch } from '@mixolydian/react';
+import { createPatch, Parameter, Value } from '@mixolydian/react';
 
 type Patch = {
-  // add types of your patch parameters here
-  parameter: {
-    kind: 'parameter',
-    value: float
-  },
-  ...
+  frequency: Parameter<number>;
+  data: Value<{
+    foo: number;
+    bar: boolean;
+  }>;
 };
 
 export const patch = createPatch<Patch>();
@@ -33,9 +32,10 @@ In your [createPatchView function](https://cmajor.dev/docs/PatchFormat#specifyin
 import { App } from './App';
 import { createRoot } from 'react-dom/client';
 import { patch } from './patch';
+import { EmbeddedPatchConnection } from '@mixolydian/react';
 
-export default function createPatchView(patchConnection: any) {
-  patch.connect(patchConnection);
+export default async function createPatchView(patchConnection: EmbeddedPatchConnection) {
+  await patch.connect(patchConnection);
   const container = document.createElement('div');
   const root = createRoot(container);
   root.render(<App />);
@@ -48,14 +48,14 @@ Usage in components:
 ```ts
 import { patch } from './patch';
 
-export const Component = () => {
-  const parameter = patch.useParameter('parameter');
+export const App = () => {
+  const frequency = patch.useParameter('frequency');
 
   return (
-    <>
-      <span>Parameter value: {parameter.value}</span>
-      <button onClick={() => parameter.set(440)}>Set to 440</button>
-    </>
+    <p style={{ backgroundColor: 'white' }}>
+      <button onClick={() => frequency.set(440)}>Test</button>
+      <span>Frequency: {frequency.value}</span>
+    </p>
   );
 };
 ```
