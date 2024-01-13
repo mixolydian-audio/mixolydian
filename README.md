@@ -1,5 +1,7 @@
 <img src="https://github.com/mixolydian-audio/mixolydian/assets/74794442/c665cfbf-5ea6-427f-9597-4c67e3c7b445" alt="mixolydian logo" width="300" />
 
+![build](https://github.com/mixolydian-audio/mixolydian/actions/workflows/test.yml/badge.svg)
+
 Typescript first utility library around [Cmajors](https://cmajor.dev/) custom UI functionality, with adapters for common UI frameworks like react.
 
 ### Apps and Packages
