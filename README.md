@@ -17,7 +17,10 @@ import { createPatch } from '@mixolydian/react';
 
 type Patch = {
   // add types of your patch parameters here
-  parameter: float,
+  parameter: {
+    kind: 'parameter',
+    value: float
+  },
   ...
 };
 
