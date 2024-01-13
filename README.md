@@ -24,7 +24,7 @@ type Patch = {
 export const patch = createPatch<Patch>();
 ```
 
-In your createPatchView function, call patch.connect with the patchConnection object.
+In your [createPatchView function](https://cmajor.dev/docs/PatchFormat#specifying-a-custom-gui-for-a-patch), call patch.connect with the [patchConnection](https://cmajor.dev/docs/PatchFormat#the-patchconnection-object) object.
 
 ```ts
 import { App } from './App';
