@@ -1,16 +1,11 @@
-import { createPatch } from '@mixolydian/react';
+import { createPatch, Parameter, Value } from '@mixolydian/react';
+
 type Patch = {
-  frequency: {
-    kind: 'parameter';
-    value: number;
-  };
-  complexSingle: {
-    kind: 'value';
-    value: {
-      foo: number;
-      bar: boolean;
-    };
-  };
+  frequency: Parameter<number>;
+  data: Value<{
+    foo: number;
+    bar: boolean;
+  }>;
 };
 
 export const patch = createPatch<Patch>();

@@ -1,4 +1,3 @@
-import { as } from 'vitest/dist/reporters-qc5Smpt5.js';
 import { EmbeddedPatchConnection } from './cmajor/types';
 import { Endpoints, GetFunction, PatchInputs, SetFunction, SubscribeFunction, UnsubscribeFunction } from './types';
 
@@ -64,29 +63,33 @@ export const createPatch = <T extends PatchInputs>() => {
       subscribe,
       unsubscribe,
     },
-    connect: (patchConnection: EmbeddedPatchConnection) => {
-      connection = patchConnection;
-      connection.addAllParameterListener(({ endpointID, value }) => {
-        const endpoint = endpointID as Endpoints<T>;
-        const updateValue = value as T[Endpoints<T>];
-        store[endpoint] = updateValue;
+    connect: (patchConnection: EmbeddedPatchConnection): Promise<void> => {
+      return new Promise((resolve) => {
+        connection = patchConnection;
+        connection.addAllParameterListener(({ endpointID, value }) => {
+          const endpoint = endpointID as Endpoints<T>;
+          const updateValue = value as T[Endpoints<T>];
+          store[endpoint] = updateValue;
 
-        for (const listener of listeners[endpoint] || []) {
-          listener(updateValue);
-        }
+          for (const listener of listeners[endpoint] || []) {
+            listener(updateValue);
+          }
+        });
+
+        connection.addStatusListener((status) => {
+          if (!connection) {
+            throw new Error('Connection to patch could not be established.');
+          }
+
+          for (const input of status.details.inputs) {
+            connection.requestParameterValue(input.endpointID);
+          }
+
+          resolve();
+        });
+
+        connection.requestStatusUpdate();
       });
-
-      connection.addStatusListener((status) => {
-        if (!connection) {
-          throw new Error('Connection to patch could not be established.');
-        }
-
-        for (const input of status.details.inputs) {
-          connection.requestParameterValue(input.endpointID);
-        }
-      });
-
-      connection.requestStatusUpdate();
     },
   };
 };
