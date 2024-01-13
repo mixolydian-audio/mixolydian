@@ -1,9 +1,15 @@
 import { createPatch } from '@mixolydian/react';
 type Patch = {
-  frequency: number;
+  frequency: {
+    kind: 'parameter';
+    value: number;
+  };
   complexSingle: {
-    foo: number;
-    bar: boolean;
+    kind: 'value';
+    value: {
+      foo: number;
+      bar: boolean;
+    };
   };
 };
 

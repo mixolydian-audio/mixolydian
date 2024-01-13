@@ -1,1 +1,2 @@
-export { createPatch } from './create';
+export * from './create';
+export * from './types';

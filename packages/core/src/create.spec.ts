@@ -1,15 +1,16 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { createPatch } from './create';
 import { mockPatchConnection } from './cmajor/mocks/connection';
+import type { Parameter, Value } from './types';
 
 vi.mock('./cmajor/mocks/connection');
 
 type PatchInputs = {
-  frequency: number;
-  complexSingle: {
+  frequency: Parameter<number>;
+  complexSingle: Value<{
     foo: number;
     bar: boolean;
-  };
+  }>;
 };
 
 describe('Patch', () => {
@@ -40,7 +41,7 @@ describe('Patch', () => {
 
   it('should return a patch', () => {
     const patch = createPatch<PatchInputs>();
-    expect(patch.parameters).toBeDefined();
+    expect(patch.endpoints).toBeDefined();
   });
 
   it('should trigger a listener when a parameter changes', async () => {
@@ -48,19 +49,20 @@ describe('Patch', () => {
 
     patch.connect(mockPatchConnection);
 
-    expect(patch.parameters.get('frequency')).toStrictEqual(0);
+    expect(patch.endpoints.get('frequency')).toStrictEqual(0);
 
     const updateHandler = vi.fn().mockImplementation((value) => {});
 
-    patch.parameters.subscribe('frequency', updateHandler);
+    patch.endpoints.subscribe('frequency', updateHandler);
 
-    patch.parameters.set('frequency', 1);
+    patch.endpoints.set('frequency', 1);
     await vi.waitFor(() => expect(updateHandler).toBeCalledWith(1));
   });
 
   it('should return the correct type for a parameter', () => {
     const patch = createPatch<PatchInputs>();
     patch.connect(mockPatchConnection);
-    const frequency = patch.parameters.get('frequency');
+    const frequency: number = patch.endpoints.get('frequency');
+    expect(frequency).toStrictEqual(0);
   });
 });
