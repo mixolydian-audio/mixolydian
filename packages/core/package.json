@@ -20,5 +20,6 @@
     "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.1.3"
   },
-  "prettier": "@repo/eslint-config/prettier"
+  "prettier": "@repo/eslint-config/prettier",
+  "license": "MIT"
 }
