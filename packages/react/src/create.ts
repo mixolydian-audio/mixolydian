@@ -9,7 +9,6 @@ type Parameter<T> = {
 
 export const createPatch = <T extends PatchInputs>() => {
   const patch = createPatchCore<T>();
-
   const useParameter = <K extends Endpoints<T>>(endpoint: K): Parameter<T[K]['value']> => {
     const [value, setValue] = useState<T[K]['value']>(patch.endpoints.get(endpoint));
 
