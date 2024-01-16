@@ -21,7 +21,7 @@
     "@manypkg/cli": "^0.21.2",
     "@repo/eslint-config": "0.0.0",
     "@repo/typescript-config": "0.0.0",
-    "prettier": "^3.1.0",
+    "prettier": "^3.2.2",
     "turbo": "latest"
   },
   "license": "MIT"
